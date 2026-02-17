@@ -16,8 +16,13 @@ int main() {
         printf("6. Save contacts\n");
         printf("7. Exit\n");
         printf("Enter your choice: ");
-        scanf("%d", &choice);
-
+        int result = scanf("%d", &choice);
+        if (result != 1) {
+            printf("Please enter a number.\n");
+            while (getchar() != '\n')
+                ;
+            continue;
+        }
         Action ac = (Action)choice;
         switch (choice) {
         case CREATE:
