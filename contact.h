@@ -5,13 +5,13 @@
 
 typedef enum { CREATE = 1, SEARCH, UPDATE, DELETE, LIST, SAVE, EXIT } Action;
 
-typedef struct {
+typedef struct Contact {
     char name[50];
     char phone[20];
     char email[50];
 } Contact;
 
-typedef struct {
+typedef struct AddressBook {
     Contact contacts[100];
     int contactCount;
 } AddressBook;

@@ -1,3 +1,6 @@
+typedef struct Contact Contact;
+typedef struct AddressBook AddressBook;
+
 void printCellEdge(void);
 
 void printTableEdge(void);
