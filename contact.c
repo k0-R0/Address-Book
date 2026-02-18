@@ -1,21 +1,13 @@
 #include "contact.h"
 #include "file.h"
 #include "populate.h"
+#include "renderTable.h"
 #include "validations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 typedef enum { NAME = 1, PHONE, EMAIL } SortCriteria;
-
-void displayContact(Contact *contact, int index) {
-    char buffer[5];
-    sprintf(buffer, "%d", index + 1);
-    printf("|%-8s |%-20s |%-15s |%-30s |\n", buffer, contact->name,
-           contact->phone, contact->email);
-    printf("+---------------------+----------------+-------------------------"
-           "------+\n");
-}
 
 int compareByName(const Contact *a, const Contact *b) {
     const char *aa = a->name;
@@ -87,14 +79,15 @@ void listContacts(AddressBook *addressBook) {
         if (sc > 3 || sc < 1)
             printf("Enter a valid criteria\n");
     } while (sc > 3 || sc < 1);
-    printf("+---------------------+----------------+-------------------------"
-           "------+\n");
-    printf("|%-20s |%-15s |%-30s |\n", "Name", "Phone", "Email");
-    printf("+---------------------+----------------+-------------------------"
-           "------+\n");
     sortContacts(addressBook, sc);
-    for (int i = 0; i < addressBook->contactCount; i++)
-        displayContact(&addressBook->contacts[i], i);
+    printTableHeaders();
+    for (int i = 0; i < addressBook->contactCount; i++) {
+        displayContact(i + 1, &addressBook->contacts[i]);
+        if (i != addressBook->contactCount - 1)
+            printCellEdge();
+        else
+            printTableEdge();
+    }
 }
 
 void initialize(AddressBook *addressBook) {
@@ -136,14 +129,10 @@ void createContact(AddressBook *addressBook) {
     strcpy(addressBook->contacts[addressBook->contactCount].phone, phone);
     strcpy(addressBook->contacts[addressBook->contactCount++].email, email);
     printf("\nContact Added - \n");
-    printf("+---------------------+----------------+-------------------------"
-           "------+\n");
-    printf("|%-8s |%-20s |%-15s |%-30s |\n", "Contact No.", "Name", "Phone",
-           "Email");
-    printf("+---------------------+----------------+-------------------------"
-           "------+\n");
-    displayContact(&addressBook->contacts[addressBook->contactCount - 1],
-                   addressBook->contactCount - 1);
+    printTableHeaders();
+    displayContact(addressBook->contactCount,
+                   &addressBook->contacts[addressBook->contactCount - 1]);
+    printTableEdge();
 }
 
 int searchContact(AddressBook *addressBook) {
@@ -157,21 +146,15 @@ int searchContact(AddressBook *addressBook) {
             strstr(addressBook->contacts[i].phone, searchText) ||
             strstr(addressBook->contacts[i].email, searchText)) {
             if (!contactPresent) {
-                printf("+---------------------+----------------+---------------"
-                       "----------"
-                       "------+\n");
-                printf("|%-20s |%-15s |%-30s |\n", "Name", "Phone", "Email");
-                printf("+---------------------+----------------+---------------"
-                       "----------"
-                       "------+\n");
+                printTableHeaders();
             }
-            displayContact(&addressBook->contacts[i], i);
+            displayContact(i + 1, &addressBook->contacts[i]);
+            printCellEdge();
             contactPresent = 1;
         }
     }
     if (!contactPresent)
-        printf("--------------------\nContact not "
-               "found\n-------------------\n");
+        printMessage("Contact not found.");
     return contactPresent;
 }
 void editContactName(AddressBook *addressBook, int index) {
@@ -231,8 +214,10 @@ void editContact(AddressBook *addressBook) {
     default:
         printf("Enter a valid field to edit\n");
     }
-    printf("Contact Updated Successfully\n");
-    displayContact(&addressBook->contacts[index - 1], index);
+    printMessage("Contact Updated Successfully");
+    printTableHeaders();
+    displayContact(index, &addressBook->contacts[index - 1]);
+    printTableEdge();
 }
 
 void deleteContact(AddressBook *addressBook) {
@@ -247,5 +232,5 @@ void deleteContact(AddressBook *addressBook) {
         addressBook->contacts[i] = addressBook->contacts[i + 1];
     }
     addressBook->contactCount--;
-    printf("\n-------------------Contact Deleted.\n-------------------\n");
+    printMessage("Contact Deleted.");
 }
