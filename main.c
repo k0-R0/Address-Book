@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main() {
-    int choice, sortChoice;
+    int choice;
     AddressBook addressBook;
     initialize(&addressBook); // Initialize the address book
 
@@ -24,7 +24,7 @@ int main() {
             continue;
         }
         Action ac = (Action)choice;
-        switch (choice) {
+        switch (ac) {
         case CREATE:
             createContact(&addressBook);
             break;

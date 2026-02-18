@@ -72,7 +72,9 @@ void listContacts(AddressBook *addressBook) {
         printf("1. Sort by Name (Ascending)\n");
         printf("2. Sort by Phone (Ascending)\n");
         printf("3. Sort by Email (Ascending)\n");
-        int result = scanf("%d", &sc);
+        int choice;
+        int result = scanf("%d", &choice);
+        sc = (SortCriteria)choice;
         if (result != 1) {
             printf("Invalid input, please enter a number");
             while (getchar() != '\n')
