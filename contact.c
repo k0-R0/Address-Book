@@ -135,16 +135,28 @@ void searchContact(AddressBook *addressBook) {
     /* Define the logic for search */
     printf("Enter search text...\n");
     char searchText[50];
+    char contactPresent = 0;
     scanf("%s", searchText);
     for (int i = 0; i < addressBook->contactCount; i++) {
         if (strstr(addressBook->contacts[i].name, searchText) ||
             strstr(addressBook->contacts[i].phone, searchText) ||
             strstr(addressBook->contacts[i].email, searchText)) {
+            if (!contactPresent) {
+                printf("+---------------------+----------------+---------------"
+                       "----------"
+                       "------+\n");
+                printf("|%-20s |%-15s |%-30s |\n", "Name", "Phone", "Email");
+                printf("+---------------------+----------------+---------------"
+                       "----------"
+                       "------+\n");
+            }
             displayContact(&addressBook->contacts[i]);
-            return;
+            contactPresent = 1;
         }
     }
-    printf("\n --------------------\nContact not found\n-------------------\n");
+    if (!contactPresent)
+        printf("--------------------\nContact not "
+               "found\n-------------------\n");
 }
 
 void editContact(AddressBook *addressBook) {
