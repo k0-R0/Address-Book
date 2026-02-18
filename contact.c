@@ -1,6 +1,7 @@
 #include "contact.h"
 #include "file.h"
 #include "populate.h"
+#include "validations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -114,13 +115,22 @@ void createContact(AddressBook *addressBook) {
     char email[50];
     printf("Enter name of contact : \n");
     scanf(" %49[^\n]", name);
-    // validate(NAME, name);
-    printf("Enter phone of contact : \n");
-    scanf("%s", phone);
-    // validate(PHONE, phone);
-    printf("Enter email of contact : \n");
-    scanf("%s", email);
-    // validate(EMAIL, email);
+
+    do {
+        printf("Enter phone of contact : \n");
+        scanf("%s", phone);
+        if (!validatePhone(addressBook, phone))
+            printf("Invalid or duplicate phone number. Try again.\n");
+    } while (!validatePhone(addressBook, phone));
+
+    do {
+
+        printf("Enter email of contact : \n");
+        scanf("%s", email);
+        if (!validateEmail(email))
+            printf("Invalid email. Please try again.\n");
+    } while (!validateEmail(email));
+
     strcpy(addressBook->contacts[addressBook->contactCount].name, name);
     strcpy(addressBook->contacts[addressBook->contactCount].phone, phone);
     strcpy(addressBook->contacts[addressBook->contactCount++].email, email);
