@@ -8,9 +8,11 @@
 
 typedef enum { NAME = 1, PHONE, EMAIL } SortCriteria;
 
-void displayContact(Contact *contact) {
-    printf("|%-20s |%-15s |%-30s |\n", contact->name, contact->phone,
-           contact->email);
+void displayContact(Contact *contact, int index) {
+    char buffer[5];
+    sprintf(buffer, "%d", index + 1);
+    printf("|%-8s |%-20s |%-15s |%-30s |\n", buffer, contact->name,
+           contact->phone, contact->email);
     printf("+---------------------+----------------+-------------------------"
            "------+\n");
 }
@@ -92,7 +94,7 @@ void listContacts(AddressBook *addressBook) {
            "------+\n");
     sortContacts(addressBook, sc);
     for (int i = 0; i < addressBook->contactCount; i++)
-        displayContact(&addressBook->contacts[i]);
+        displayContact(&addressBook->contacts[i], i);
 }
 
 void initialize(AddressBook *addressBook) {
@@ -124,7 +126,6 @@ void createContact(AddressBook *addressBook) {
     } while (!validatePhone(addressBook, phone));
 
     do {
-
         printf("Enter email of contact : \n");
         scanf("%s", email);
         if (!validateEmail(email))
@@ -137,13 +138,15 @@ void createContact(AddressBook *addressBook) {
     printf("\nContact Added - \n");
     printf("+---------------------+----------------+-------------------------"
            "------+\n");
-    printf("|%-20s |%-15s |%-30s |\n", "Name", "Phone", "Email");
+    printf("|%-8s |%-20s |%-15s |%-30s |\n", "Contact No.", "Name", "Phone",
+           "Email");
     printf("+---------------------+----------------+-------------------------"
            "------+\n");
-    displayContact(&addressBook->contacts[addressBook->contactCount - 1]);
+    displayContact(&addressBook->contacts[addressBook->contactCount - 1],
+                   addressBook->contactCount - 1);
 }
 
-void searchContact(AddressBook *addressBook) {
+int searchContact(AddressBook *addressBook) {
     /* Define the logic for search */
     printf("Enter search text...\n");
     char searchText[50];
@@ -162,17 +165,60 @@ void searchContact(AddressBook *addressBook) {
                        "----------"
                        "------+\n");
             }
-            displayContact(&addressBook->contacts[i]);
+            displayContact(&addressBook->contacts[i], i);
             contactPresent = 1;
         }
     }
     if (!contactPresent)
         printf("--------------------\nContact not "
                "found\n-------------------\n");
+    return contactPresent;
 }
 
 void editContact(AddressBook *addressBook) {
     /* Define the logic for Editcontact */
+    int contactPresent = searchContact(addressBook);
+    if (!contactPresent)
+        return;
+    printf("Enter which contact to edit\n");
+    int index;
+    scanf("%d", &index);
+    printf("1. Edit name\n");
+    printf("2. Edit phone\n");
+    printf("3. Edit email\n");
+    int choice;
+    scanf("%d", &choice);
+    SortCriteria sc = (SortCriteria)choice;
+    switch (sc) {
+    case NAME: {
+        char name[50];
+        printf("Enter name of contact : \n");
+        scanf(" %49[^\n]", name);
+        strcpy(addressBook->contacts[index - 1].name, name);
+    } break;
+    case PHONE: {
+        char phone[20];
+        do {
+            printf("Enter phone of contact : \n");
+            scanf("%s", phone);
+            if (!validatePhone(addressBook, phone))
+                printf("Invalid or duplicate phone number. Try again.\n");
+        } while (!validatePhone(addressBook, phone));
+        strcpy(addressBook->contacts[index - 1].phone, phone);
+    } break;
+    case EMAIL: {
+        char email[50];
+        do {
+            printf("Enter email of contact : \n");
+            scanf("%s", email);
+            if (!validateEmail(email))
+                printf("Invalid email. Please try again.\n");
+        } while (!validateEmail(email));
+        strcpy(addressBook->contacts[index - 1].email, email);
+    } break;
+    }
+    printf("Contact Updated Successfully\n");
+    displayContact(&addressBook->contacts[index - 1], index);
 }
 
 void deleteContact(AddressBook *addressBook) {
