@@ -99,9 +99,9 @@ int searchContact(AddressBook *addressBook, int arr[]) {
     char contactPresent = 0;
     scanf("%s", searchText);
     for (int i = 0; i < addressBook->contactCount; i++) {
-        if (strstr(addressBook->contacts[i].name, searchText) ||
-            strstr(addressBook->contacts[i].phone, searchText) ||
-            strstr(addressBook->contacts[i].email, searchText)) {
+        if (strcasestr(addressBook->contacts[i].name, searchText) ||
+            strcasestr(addressBook->contacts[i].phone, searchText) ||
+            strcasestr(addressBook->contacts[i].email, searchText)) {
             if (!contactPresent) {
                 printTableHeaders();
             }
@@ -170,13 +170,14 @@ void editContact(AddressBook *addressBook) {
         printf("1. Edit name\n");
         printf("2. Edit phone\n");
         printf("3. Edit email\n");
+        printf("4. Return to main menu\n");
         if (!readInt(&choice)) {
             printf("Please enter a number.\n");
             continue;
         }
-        if (choice < 1 || choice > 3)
+        if (choice < 1 || choice > 4)
             printf("Enter a valid field to edit\n");
-    } while (choice < 1 || choice > 3);
+    } while (choice < 1 || choice > 4);
 
     ContactInfo sc = (ContactInfo)choice;
     switch (sc) {
@@ -188,6 +189,9 @@ void editContact(AddressBook *addressBook) {
         break;
     case EMAIL:
         editContactEmail(addressBook, index - 1);
+        break;
+    default:
+        return;
     }
 
     printMessage("Contact Updated Successfully");

@@ -4,21 +4,15 @@
 typedef enum { NAME = 1, PHONE, EMAIL } ContactInfo;
 
 int compareByName(const Contact *a, const Contact *b) {
-    const char *aa = a->name;
-    const char *bb = b->name;
-    return strcasecmp(aa, bb);
+    return strcasecmp(a->name, b->name);
 }
 
 int compareByPhone(const Contact *a, const Contact *b) {
-    const char *aa = a->phone;
-    const char *bb = b->phone;
-    return strcasecmp(aa, bb);
+    return strcasecmp(a->phone, b->phone);
 }
 
 int compareByEmail(const Contact *a, const Contact *b) {
-    const char *aa = a->email;
-    const char *bb = b->email;
-    return strcasecmp(aa, bb);
+    return strcasecmp(a->email, b->email);
 }
 
 void sortBook(AddressBook *addressBook,
