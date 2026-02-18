@@ -1,7 +1,7 @@
 #include "contact.h"
 #include <string.h>
 
-typedef enum { NAME = 1, PHONE, EMAIL } SortCriteria;
+typedef enum { NAME = 1, PHONE, EMAIL } ContactInfo;
 
 int compareByName(const Contact *a, const Contact *b) {
     const char *aa = a->name;
@@ -39,7 +39,7 @@ void sortBook(AddressBook *addressBook,
     }
 }
 
-void sortContacts(AddressBook *addressBook, SortCriteria sc) {
+void sortContacts(AddressBook *addressBook, ContactInfo sc) {
     // sort the addressbook on name / email / phone
     switch (sc) {
     case NAME:

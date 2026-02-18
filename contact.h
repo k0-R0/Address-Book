@@ -17,11 +17,12 @@ typedef struct AddressBook {
 } AddressBook;
 
 void createContact(AddressBook *addressBook);
-int searchContact(AddressBook *addressBook);
+int searchContact(AddressBook *addressBook, int *arr);
 void editContact(AddressBook *addressBook);
 void deleteContact(AddressBook *addressBook);
 void listContacts(AddressBook *addressBook);
 void initialize(AddressBook *addressBook);
 void saveContactsToFile(AddressBook *AddressBook);
+int readInt(int *value);
 
 #endif

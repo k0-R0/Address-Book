@@ -5,7 +5,7 @@ int main() {
     int choice;
     AddressBook addressBook;
     initialize(&addressBook); // Initialize the address book
-
+    int arr[100] = {0};
     do {
         printf("\nAddress Book Menu:\n");
         printf("1. Create contact\n");
@@ -16,11 +16,8 @@ int main() {
         printf("6. Save contacts\n");
         printf("7. Exit\n");
         printf("Enter your choice: ");
-        int result = scanf("%d", &choice);
-        if (result != 1) {
+        if (!readInt(&choice)) {
             printf("Please enter a number.\n");
-            while (getchar() != '\n')
-                ;
             continue;
         }
         Action ac = (Action)choice;
@@ -29,7 +26,7 @@ int main() {
             createContact(&addressBook);
             break;
         case SEARCH:
-            searchContact(&addressBook);
+            searchContact(&addressBook, arr);
             break;
         case UPDATE:
             editContact(&addressBook);

@@ -7,24 +7,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
+
+int readInt(int *value) {
+    int result = scanf("%d", value);
+    if (result != 1) {
+        while (getchar() != '\n')
+            ;
+        return 0;
+    }
+    return 1;
+}
 
 void listContacts(AddressBook *addressBook) {
     // Sort contacts based on the chosen criteria
-    SortCriteria sc;
+    ContactInfo sc;
     do {
         printf("Sort Menu : \n");
         printf("1. Sort by Name (Ascending)\n");
         printf("2. Sort by Phone (Ascending)\n");
         printf("3. Sort by Email (Ascending)\n");
         int choice;
-        int result = scanf("%d", &choice);
-        sc = (SortCriteria)choice;
-        if (result != 1) {
-            printf("Invalid input, please enter a number");
-            while (getchar() != '\n')
-                ;
+        if (!readInt(&choice)) {
+            printf("Invalid input, please enter a number\n");
             continue;
         }
+        sc = (ContactInfo)choice;
         if (sc > 3 || sc < 1)
             printf("Enter a valid criteria\n");
     } while (sc > 3 || sc < 1);
@@ -84,7 +92,7 @@ void createContact(AddressBook *addressBook) {
     printTableEdge();
 }
 
-int searchContact(AddressBook *addressBook) {
+int searchContact(AddressBook *addressBook, int arr[]) {
     /* Define the logic for search */
     printf("Enter search text...\n");
     char searchText[50];
@@ -99,6 +107,7 @@ int searchContact(AddressBook *addressBook) {
             }
             displayContact(i + 1, &addressBook->contacts[i]);
             printCellEdge();
+            arr[i] = 1;
             contactPresent = 1;
         }
     }
@@ -137,19 +146,39 @@ void editContactEmail(AddressBook *addressBook, int index) {
 
 void editContact(AddressBook *addressBook) {
     /* Define the logic for Editcontact */
-    int contactPresent = searchContact(addressBook);
+    int arr[100] = {0};
+    int contactPresent = searchContact(addressBook, arr);
     if (!contactPresent)
         return;
-    printf("Enter which contact to edit\n");
-    int index;
-    scanf("%d", &index);
+    printf("Enter the contact to edit\n");
 
-    printf("1. Edit name\n");
-    printf("2. Edit phone\n");
-    printf("3. Edit email\n");
+    int index;
+    do {
+        if (!readInt(&index)) {
+            printf("Please enter a number.\n");
+            continue;
+        }
+        if (index < 1 || index > addressBook->contactCount || !arr[index - 1]) {
+            printf("Please select one of the contacts listed above\n");
+            continue;
+        }
+        break;
+    } while (1);
+
     int choice;
-    scanf("%d", &choice);
-    SortCriteria sc = (SortCriteria)choice;
+    do {
+        printf("1. Edit name\n");
+        printf("2. Edit phone\n");
+        printf("3. Edit email\n");
+        if (!readInt(&choice)) {
+            printf("Please enter a number.\n");
+            continue;
+        }
+        if (choice < 1 || choice > 3)
+            printf("Enter a valid field to edit\n");
+    } while (choice < 1 || choice > 3);
+
+    ContactInfo sc = (ContactInfo)choice;
     switch (sc) {
     case NAME:
         editContactName(addressBook, index - 1);
@@ -159,10 +188,8 @@ void editContact(AddressBook *addressBook) {
         break;
     case EMAIL:
         editContactEmail(addressBook, index - 1);
-        break;
-    default:
-        printf("Enter a valid field to edit\n");
     }
+
     printMessage("Contact Updated Successfully");
     printTableHeaders();
     displayContact(index, &addressBook->contacts[index - 1]);
@@ -171,12 +198,25 @@ void editContact(AddressBook *addressBook) {
 
 void deleteContact(AddressBook *addressBook) {
     /* Define the logic for deletecontact */
-    int contactPresent = searchContact(addressBook);
+    int arr[100] = {0};
+    int contactPresent = searchContact(addressBook, arr);
     if (!contactPresent)
         return;
     printf("Enter which contact to delete\n");
+
     int index;
-    scanf("%d", &index);
+    do {
+        if (!readInt(&index)) {
+            printf("Please enter a number.\n");
+            continue;
+        }
+        if (index < 1 || index > addressBook->contactCount || !arr[index - 1]) {
+            printf("Please select one of the contacts listed above\n");
+            continue;
+        }
+        break;
+    } while (1);
+
     for (int i = index - 1; i < addressBook->contactCount - 1; i++) {
         addressBook->contacts[i] = addressBook->contacts[i + 1];
     }
