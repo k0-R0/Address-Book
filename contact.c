@@ -174,6 +174,34 @@ int searchContact(AddressBook *addressBook) {
                "found\n-------------------\n");
     return contactPresent;
 }
+void editContactName(AddressBook *addressBook, int index) {
+    char name[50];
+    printf("Enter name of contact : \n");
+    scanf(" %49[^\n]", name);
+    strcpy(addressBook->contacts[index].name, name);
+}
+
+void editContactPhone(AddressBook *addressBook, int index) {
+    char phone[20];
+    do {
+        printf("Enter phone of contact : \n");
+        scanf("%s", phone);
+        if (!validatePhone(addressBook, phone))
+            printf("Invalid or duplicate phone number. Try again.\n");
+    } while (!validatePhone(addressBook, phone));
+    strcpy(addressBook->contacts[index].phone, phone);
+}
+
+void editContactEmail(AddressBook *addressBook, int index) {
+    char email[50];
+    do {
+        printf("Enter email of contact : \n");
+        scanf("%s", email);
+        if (!validateEmail(email))
+            printf("Invalid email. Please try again.\n");
+    } while (!validateEmail(email));
+    strcpy(addressBook->contacts[index].email, email);
+}
 
 void editContact(AddressBook *addressBook) {
     /* Define the logic for Editcontact */
@@ -183,6 +211,7 @@ void editContact(AddressBook *addressBook) {
     printf("Enter which contact to edit\n");
     int index;
     scanf("%d", &index);
+
     printf("1. Edit name\n");
     printf("2. Edit phone\n");
     printf("3. Edit email\n");
@@ -190,32 +219,17 @@ void editContact(AddressBook *addressBook) {
     scanf("%d", &choice);
     SortCriteria sc = (SortCriteria)choice;
     switch (sc) {
-    case NAME: {
-        char name[50];
-        printf("Enter name of contact : \n");
-        scanf(" %49[^\n]", name);
-        strcpy(addressBook->contacts[index - 1].name, name);
-    } break;
-    case PHONE: {
-        char phone[20];
-        do {
-            printf("Enter phone of contact : \n");
-            scanf("%s", phone);
-            if (!validatePhone(addressBook, phone))
-                printf("Invalid or duplicate phone number. Try again.\n");
-        } while (!validatePhone(addressBook, phone));
-        strcpy(addressBook->contacts[index - 1].phone, phone);
-    } break;
-    case EMAIL: {
-        char email[50];
-        do {
-            printf("Enter email of contact : \n");
-            scanf("%s", email);
-            if (!validateEmail(email))
-                printf("Invalid email. Please try again.\n");
-        } while (!validateEmail(email));
-        strcpy(addressBook->contacts[index - 1].email, email);
-    } break;
+    case NAME:
+        editContactName(addressBook, index - 1);
+        break;
+    case PHONE:
+        editContactPhone(addressBook, index - 1);
+        break;
+    case EMAIL:
+        editContactEmail(addressBook, index - 1);
+        break;
+    default:
+        printf("Enter a valid field to edit\n");
     }
     printf("Contact Updated Successfully\n");
     displayContact(&addressBook->contacts[index - 1], index);
@@ -223,4 +237,15 @@ void editContact(AddressBook *addressBook) {
 
 void deleteContact(AddressBook *addressBook) {
     /* Define the logic for deletecontact */
+    int contactPresent = searchContact(addressBook);
+    if (!contactPresent)
+        return;
+    printf("Enter which contact to delete\n");
+    int index;
+    scanf("%d", &index);
+    for (int i = index - 1; i < addressBook->contactCount - 1; i++) {
+        addressBook->contacts[i] = addressBook->contacts[i + 1];
+    }
+    addressBook->contactCount--;
+    printf("\n-------------------Contact Deleted.\n-------------------\n");
 }
