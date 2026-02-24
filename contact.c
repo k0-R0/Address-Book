@@ -92,16 +92,42 @@ void createContact(AddressBook *addressBook) {
     printTableEdge();
 }
 
-int searchContact(AddressBook *addressBook, int arr[]) {
+int searchContact(AddressBook *addressBook, int *arr) {
     /* Define the logic for search */
+    printf("Search by one of the following fields:\n1. Name\n2. "
+           "Phone\n3. Email\n");
+    int searchFilter;
+    do {
+        if (!readInt(&searchFilter)) {
+            printf("Please enter a number.\n");
+            continue;
+        }
+        if (searchFilter > 3 || searchFilter < 1) {
+            printf("please enter a valid choice.\n");
+            continue;
+        }
+        break;
+    } while (1);
+
     printf("Enter search text...\n");
     char searchText[50];
     char contactPresent = 0;
     scanf("%s", searchText);
+    char *contactInfo;
     for (int i = 0; i < addressBook->contactCount; i++) {
-        if (strcasestr(addressBook->contacts[i].name, searchText) ||
-            strcasestr(addressBook->contacts[i].phone, searchText) ||
-            strcasestr(addressBook->contacts[i].email, searchText)) {
+        const char *field;
+        switch (searchFilter) {
+        case NAME:
+            field = addressBook->contacts[i].name;
+            break;
+        case PHONE:
+            field = addressBook->contacts[i].phone;
+            break;
+        case EMAIL:
+            field = addressBook->contacts[i].email;
+            break;
+        }
+        if (strcasestr(field, searchText)) {
             if (!contactPresent) {
                 printTableHeaders();
             }
