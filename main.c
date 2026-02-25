@@ -40,7 +40,7 @@ int main() {
             break;
         case SAVE:
             printf("Saving and Exiting...\n");
-            // saveContactsToFile(&addressBook);
+            saveContactsToFile(&addressBook);
             break;
         case EXIT:
             printf("Exiting ... \n");

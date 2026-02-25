@@ -1,8 +1,7 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include "contact.h"
-
+typedef struct AddressBook AddressBook;
 void saveContactsToFile(AddressBook *addressBook);
 void loadContactsFromFile(AddressBook *addressBook);
 
