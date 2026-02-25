@@ -2,5 +2,5 @@
 app
 *.json
 .cache/
-CMakeLists.txt
+*.txt
 build/
