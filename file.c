@@ -20,9 +20,8 @@ void loadContactsFromFile(AddressBook *addressBook) {
 
     char lineBuffer[120];
 
-    while (fgets(lineBuffer, sizeof(lineBuffer), contactsFile)) {
+    while (fscanf(contactsFile, "%[^\n]", lineBuffer) == 1) {
 
-        lineBuffer[strcspn(lineBuffer, "\n")] = '\0';
         char *name = strtok(lineBuffer, ",");
         char *phone = strtok(NULL, ",");
         char *email = strtok(NULL, ",");
@@ -35,6 +34,7 @@ void loadContactsFromFile(AddressBook *addressBook) {
         strcpy(addressBook->contacts[addressBook->contactCount].email, email);
 
         addressBook->contactCount++;
+        fgetc(contactsFile);
     }
 
     fclose(contactsFile);
