@@ -5,7 +5,6 @@ int main() {
     int choice;
     AddressBook addressBook;
     initialize(&addressBook); // Initialize the address book
-    int arr[100] = {0};
     do {
         printf("\nAddress Book Menu:\n");
         printf("1. Create contact\n");
@@ -25,9 +24,11 @@ int main() {
         case CREATE:
             createContact(&addressBook);
             break;
-        case SEARCH:
+        case SEARCH: {
+            int arr[100] = {0};
             searchContact(&addressBook, arr);
             break;
+        }
         case UPDATE:
             editContact(&addressBook);
             break;
