@@ -1,11 +1,11 @@
 #include "contact.h"
-#include "file.h"
+// #include "file.h"
 #include "populate.h"
 #include "renderTable.h"
 #include "sortEngine.h"
 #include "validations.h"
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
 
@@ -112,7 +112,19 @@ int searchContact(AddressBook *addressBook, int *arr) {
     printf("Enter search text...\n");
     char searchText[50];
     char contactPresent = 0;
-    scanf("%s", searchText);
+    if (searchFilter == PHONE) {
+        do {
+            scanf("%s", searchText);
+            if (!validatePartialPhone(searchText)) {
+                printf("please enter only numbers for searching through phone "
+                       "numbers\n");
+                while (getchar() != '\n')
+                    ;
+            }
+        } while (!validatePartialPhone(searchText));
+    } else {
+        scanf("%s", searchText);
+    }
     char *contactInfo;
     for (int i = 0; i < addressBook->contactCount; i++) {
         const char *field;

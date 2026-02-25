@@ -18,6 +18,15 @@ int validatePhone(AddressBook *addressBook, const char *phone) {
     return 1;
 }
 
+int validatePartialPhone(const char *phone) {
+    // numerics
+    int len = strlen(phone);
+    for (int i = 0; i < len; i++)
+        if (!isdigit(phone[i]))
+            return 0;
+    return 1;
+}
+
 int validateEmail(const char *email) {
     //@ , . should be present
     int len = strlen(email);
