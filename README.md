@@ -21,7 +21,14 @@ cmake --build build
 
 Alternatively if you're not using cmake
 ```bash
-gcc main.c contact.c file.c populate.c renderTable.c sortEngine.c validations.c -o addressbook
+gcc main.c contact.c file.c renderTable.c sortEngine.c validations.c -o addressbook
+```
+
+## Run
+
+Run the program by executing the binary. in case you've got the zip file. just run 
+```bash
+./build/addressbook
 ```
 
 ## Project Structure
@@ -34,8 +41,6 @@ Addressbook
 ├── file.c
 ├── file.h
 ├── main.c
-├── populate.c
-├── populate.h
 ├── renderTable.c
 ├── renderTable.h
 ├── sortEngine.c
@@ -59,16 +64,14 @@ Addressbook
 ### 4. contacts.csv
    - Stores contact data persistently.
 
-### 5. populate.c / populate.h
-   - Contains logic to populate the address book with contacts from contacts.csv
 
-### 6. renderTable.c / renderTable.h
+### 5. renderTable.c / renderTable.h
    - Formats and prints contacts in a clean table layout in the terminal.
 
-### 7. sortEngine.c / sortEngine.h
+### 6. sortEngine.c / sortEngine.h
    - Implements sorting logic for contacts (e.g., by name or phone).
 
-### 8. validations.c
+### 7. validations.c
    - Contains input validation logic for:
    -  Email format
    -  Phone numbers
