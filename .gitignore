@@ -3,4 +3,5 @@ app
 *.json
 .cache/
 *.txt
+*.csv
 build/
