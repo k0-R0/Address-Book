@@ -1,5 +1,6 @@
 #include "contact.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void saveContactsToFile(AddressBook *addressBook) {
@@ -14,6 +15,7 @@ void saveContactsToFile(AddressBook *addressBook) {
                 addressBook->contacts[i].phone, addressBook->contacts[i].email);
     }
     fclose(contactsFile);
+    exit(0);
 }
 
 void loadContactsFromFile(AddressBook *addressBook) {
