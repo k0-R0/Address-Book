@@ -4,18 +4,23 @@
 #include "renderTable.h"
 #include "sortEngine.h"
 #include "validations.h"
+#include <ctype.h>
 #include <stdio.h>
 // #include <stdlib.h>
+#include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 
 int readInt(int *value) {
-    int result = scanf("%d", value);
-    if (result != 1) {
-        while (getchar() != '\n')
-            ;
-        return 0;
+    char buffer[20];
+    scanf("%s", buffer);
+    for (int i = 0; buffer[i]; i++) {
+        if (!isdigit(buffer[i])) {
+            while (getchar() != '\n')
+                ;
+            return 0;
+        }
     }
+    *value = atoi(buffer);
     return 1;
 }
 

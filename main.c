@@ -43,7 +43,7 @@ int main() {
             saveContactsToFile(&addressBook);
             break;
         case EXIT:
-            printf("Exiting ... \n");
+            printf("Exiting... \n");
             break;
         default:
             printf("Invalid choice. Please try again.\n");
